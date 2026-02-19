@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pixel Pending LLC</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:   #000000;
+    --blue:    #0000AA;
+    --green:   #00AA00;
+    --cyan:    #00AAAA;
+    --red:     #AA0000;
+    --magenta: #AA00AA;
+    --brown:   #AA5500;
+    --lgray:   #AAAAAA;
+    --dgray:   #555555;
+    --lblue:   #5555FF;
+    --lgreen:  #55FF55;
+    --lcyan:   #55FFFF;
+    --lred:    #FF5555;
+    --lmag:    #FF55FF;
+    --yellow:  #FFFF55;
+    --white:   #FFFFFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; image-rendering: pixelated; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--lgray);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  /* Scanline overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.15) 2px,
+      rgba(0,0,0,0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: sticky;
+    top: 0;
+    background: var(--blue);
+    border-bottom: 4px solid var(--lcyan);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--white);
+    font-size: 11px;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--lcyan);
+    text-decoration: none;
+    font-size: 9px;
+    transition: color 0.1s;
+  }
+
+  .nav-links a:hover { color: var(--yellow); }
+
+  /* ─── HOURGLASS LOGO (CSS pixel grid) ─── */
+  .hg {
+    display: grid;
+    grid-template-columns: repeat(11, 4px);
+    grid-template-rows:    repeat(17, 4px);
+    gap: 0;
+    flex-shrink: 0;
+  }
+  .hg.large {
+    grid-template-columns: repeat(13, 12px);
+    grid-template-rows:    repeat(17, 12px);
+  }
+  .px   { width:100%; height:100%; }
+  .px._ { background: transparent; }
+  .px.W { background: #FFFFFF; }
+  /* falling pixel colors */
+  .px.r { background: #FF5555; }
+  .px.b { background: #5555FF; }
+  .px.c { background: #55FFFF; }
+  .px.g { background: #55FF55; }
+  .px.o { background: #AA5500; }
+
+  /* ─── HERO ─── */
+  #home {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  #home::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 8px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--blue) 0px, var(--blue) 4px,
+      var(--black) 4px, var(--black) 8px
+    );
+  }
+
+  .hero-logo {
+    margin-bottom: 32px;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .hero-logo canvas {
+    width: 120px;
+    height: 144px;
+    image-rendering: pixelated;
+  }
+
+  .hero-title {
+    font-size: 28px;
+    color: var(--lcyan);
+    text-shadow: 4px 4px 0 var(--blue);
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+  }
+
+  .hero-sub {
+    font-size: 11px;
+    color: var(--lgreen);
+    margin-bottom: 40px;
+    border-right: 2px solid var(--lgreen);
+    animation: blink-cursor 1s step-end infinite;
+    padding-right: 4px;
+  }
+
+  @keyframes blink-cursor {
+    0%, 100% { border-right-color: var(--lgreen); }
+    50% { border-right-color: transparent; }
+  }
+
+  .hero-tagline {
+    color: var(--yellow);
+    font-size: 10px;
+    max-width: 480px;
+    margin-bottom: 40px;
+  }
+
+  .btn {
+    display: inline-block;
+    background: var(--lgreen);
+    color: var(--black);
+    padding: 12px 24px;
+    text-decoration: none;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 var(--green);
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+
+  .btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--green);
+    background: var(--yellow);
+  }
+
+  .btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--green);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--lcyan);
+    border: 3px solid var(--lcyan);
+    box-shadow: 4px 4px 0 var(--blue);
+    margin-left: 12px;
+  }
+
+  .btn-outline:hover {
+    background: var(--blue);
+    color: var(--white);
+    box-shadow: 6px 6px 0 var(--blue);
+  }
+
+  /* ─── SECTION BASE ─── */
+  section {
+    padding: 64px 24px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    color: var(--yellow);
+    font-size: 16px;
+    margin-bottom: 8px;
+    text-shadow: 3px 3px 0 var(--brown);
+  }
+
+  .section-divider {
+    height: 4px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--lcyan) 0px, var(--lcyan) 8px,
+      var(--blue) 8px, var(--blue) 16px
+    );
+    margin-bottom: 32px;
+    margin-top: 8px;
+  }
+
+  /* ─── GAMES ─── */
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    margin-top: 8px;
+  }
+
+  .game-card {
+    border: 3px solid var(--blue);
+    background: #000810;
+    padding: 20px;
+    position: relative;
+    transition: border-color 0.1s, transform 0.1s;
+  }
+
+  .game-card:hover {
+    border-color: var(--lcyan);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--blue);
+  }
+
+  .game-card-tag {
+    position: absolute;
+    top: -12px; left: 12px;
+    background: var(--lred);
+    color: var(--white);
+    font-size: 8px;
+    padding: 3px 8px;
+  }
+
+  .game-screen {
+    width: 100%;
+    height: 120px;
+    background: var(--black);
+    border: 2px solid var(--dgray);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .game-title { color: var(--lcyan); font-size: 11px; margin-bottom: 8px; }
+  .game-desc  { color: var(--lgray); font-size: 8px; line-height: 1.9; margin-bottom: 12px; }
+
+  .status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 7px;
+    background: var(--brown);
+    color: var(--yellow);
+  }
+  .status-badge.coming-soon { background: var(--blue); color: var(--lcyan); }
+  .status-badge.released    { background: var(--green); color: var(--black); }
+
+  /* ─── ABOUT ─── */
+  .about-box {
+    border: 3px solid var(--magenta);
+    padding: 28px;
+    background: #080010;
+    box-shadow: 6px 6px 0 var(--blue);
+  }
+  .about-box p { font-size: 9px; line-height: 2; color: var(--lgray); margin-bottom: 16px; }
+  .about-box p:last-child { margin-bottom: 0; }
+  .highlight  { color: var(--lgreen); }
+  .highlight2 { color: var(--lmag); }
+  .highlight3 { color: var(--yellow); }
+
+  /* ─── CONTACT ─── */
+  .contact-box {
+    border: 3px solid var(--lgreen);
+    padding: 28px;
+    background: #001008;
+    box-shadow: 6px 6px 0 var(--green);
+  }
+  .contact-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 2px dashed var(--dgray);
+    font-size: 9px;
+  }
+  .contact-row:last-child { border-bottom: none; }
+  .contact-label { color: var(--lcyan); min-width: 80px; }
+  .contact-val a { color: var(--lgreen); text-decoration: none; }
+  .contact-val a:hover { color: var(--yellow); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--blue);
+    border-top: 4px solid var(--lcyan);
+    text-align: center;
+    padding: 20px;
+    font-size: 8px;
+    color: var(--lgray);
+  }
+  footer span { color: var(--lcyan); }
+
+  /* ─── PIXEL RAIN ─── */
+  .pixel-rain {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .rain-col {
+    position: absolute;
+    top: -20px;
+    width: 4px;
+    animation: rain-fall linear infinite;
+  }
+  @keyframes rain-fall {
+    0%   { transform: translateY(-40px); }
+    100% { transform: translateY(100vh); }
+  }
+
+  /* ─── BLINKING PROMPT ─── */
+  .prompt::after {
+    content: '█';
+    animation: blink 0.8s step-end infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
+  .notice-bar {
+    background: var(--brown);
+    color: var(--yellow);
+    text-align: center;
+    padding: 8px;
+    font-size: 8px;
+    border-bottom: 2px solid var(--yellow);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .marquee-inner {
+    display: inline-block;
+    animation: marquee 20s linear infinite;
+  }
+  @keyframes marquee {
+    0%   { transform: translateX(100vw); }
+    100% { transform: translateX(-100%); }
+  }
+</style>
+</head>
+<body>
+
+<div class="notice-bar">
+  <span class="marquee-inner">
+    ★ PIXEL PENDING LLC ★ INDIE GAMES STUDIO ★ FIRST RELEASE COMING SOON ★ STAY TUNED ★ PIXEL PENDING LLC ★ INDIE GAMES ★ FIRST RELEASE COMING SOON ★ STAY TUNED ★ JOIN THE DISCORD? ★
+  </span>
+</div>
+
+<nav>
+  <a class="nav-logo" href="#home">
+  <div class="hg">
+    <div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div>
+    <div class="px _"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px _"></div>
+    <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+    <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+    <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+    <div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div>
+    <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+    <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _" id="nf0"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+    <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _" id="nf1"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+    <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _" id="nf2"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+    <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _" id="nf3"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+    <div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _" id="nf4"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div>
+    <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+    <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+    <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+    <div class="px _"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px _"></div>
+    <div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div>
+  </div>
+    PIXEL PENDING
+  </a>
+  <ul class="nav-links">
+    <li><a href="#home">HOME</a></li>
+    <li><a href="#games">GAMES</a></li>
+    <li><a href="#about">ABOUT</a></li>
+    <li><a href="#contact">CONTACT</a></li>
+  </ul>
+</nav>
+
+<div id="home">
+  <div class="pixel-rain" id="pixelRain"></div>
+
+  <div class="hero-logo">
+    <div class="hg large">
+      <div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _" id="hf0"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _" id="hf1"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _" id="hf2"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _" id="hf3"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _" id="hf4"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div>
+    </div>
+  </div>
+
+  <h1 class="hero-title">PIXEL PENDING</h1>
+  <p class="hero-sub">LLC&nbsp;&nbsp;&nbsp;<span class="prompt"></span></p>
+  <p class="hero-tagline">
+    FIGURING IT OUT, ONE PIXEL AT A TIME<br>
+  </p>
+  <div>
+    <a href="#games" class="btn">▶ VIEW GAMES</a>
+    <a href="#contact" class="btn btn-outline">CONTACT</a>
+  </div>
+</div>
+
+<div style="background:#000510;padding:2px 0;">
+<section id="games">
+  <h2 class="section-header">// GAMES</h2>
+  <div class="section-divider"></div>
+  <div class="games-grid">
+
+    <div class="game-card">
+      <div class="game-card-tag">NEW</div>
+      <div class="game-screen">
+        <img src="images/units_screenshot.png" alt="Units Screenshot" style="width:100%;height:100%;object-fit:cover;">
+        <!-- <canvas id="gameCanvas1" width="240" height="120" style="width:100%;height:100%;"></canvas> -->
+      </div>
+        <div class="game-title">Units!</div>
+        <p class="game-desc">Guide the little guys to the finish line.<br> Solve the puzzles?</p>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+            <a href="#" class="btn" style="font-size:7px;padding:6px 10px;">STEAM</a>
+            <a href="#" class="btn" style="font-size:7px;padding:6px 10px;">ITCH.IO</a>
+            <a href="#" class="btn" style="font-size:7px;padding:6px 10px;">URL</a>
+        </div>
+      <span class="status-badge coming-soon">◈ COMING SOON</span>
+    </div>
+
+    <!-- 
+    <div class="game-card">
+      <div class="game-screen">
+        <span style="color:#333;font-size:8px;">[ UNANNOUNCED ]</span>
+      </div>
+      <div class="game-title">NEXT PROJECT</div>
+      <p class="game-desc">Something is brewing in the<br>pixel foundry...</p>
+      <span class="status-badge" style="background:#333;color:#666;">◌ IN DEVELOPMENT</span>
+    </div>
+     -->
+
+  </div>
+</section>
+</div>
+
+<div style="background:#050005;padding:2px 0;">
+<section id="about">
+  <h2 class="section-header">// ABOUT</h2>
+  <div class="section-divider"></div>
+  <div class="about-box">
+    <p><span class="highlight">PIXEL PENDING LLC</span> an indie studio bootstrapped from nothing but ideas. No budgets, just a hobby.</p>
+    <p>Please join the <span class="highlight2">community when opened</span>. Will open to testing and all kinds of community input as we move along.</p>
+    <p>The name says it all, there are always more pixels on the way. <span class="highlight3">Stay tuned.</span></p>
+  </div>
+</section>
+</div>
+
+<div style="background:#000800;padding:2px 0;">
+<section id="contact">
+  <h2 class="section-header">// CONTACT</h2>
+  <div class="section-divider"></div>
+  <div class="contact-box">
+    <div class="contact-row">
+      <span class="contact-label">EMAIL</span>
+      <span class="contact-val"><a href="mailto:hello@pixelpending.com">hello@pixelpending.com</a></span>
+    </div>
+    <div class="contact-row">
+      <span class="contact-label">WEBSITE</span>
+      <span class="contact-val"><a href="#">www.pixelpending.com</a></span>
+    </div>
+<!-- 
+    <div class="contact-row">
+      <span class="contact-label">STEAM</span>
+      <span class="contact-val"><a href="#">URL</a></span>
+    </div>
+
+    <div class="contact-row">
+      <span class="contact-label">TWITTER</span>
+      <span class="contact-val"><a href="#">@pixelpendingllc</a></span>
+    </div>
+    <div class="contact-row">
+      <span class="contact-label">ITCH.IO</span>
+      <span class="contact-val"><a href="#">pixelpending.itch.io</a></span>
+    </div>
+ -->
+  </div>
+</section>
+</div>
+
+<footer>
+  <span>PIXEL PENDING LLC</span> © 2025 — ALL RIGHTS RESERVED<br>
+</footer>
+
+<script>
+const EGA = ['#000000','#0000AA','#00AA00','#00AAAA','#AA0000','#AA00AA','#AA5500','#AAAAAA',
+             '#555555','#5555FF','#55FF55','#55FFFF','#FF5555','#FF55FF','#FFFF55','#FFFFFF'];
+
+// ─── FALLING PIXELS ───
+const dropColors = ['#FF5555','#5555FF','#55FFFF','#55FF55','#FFFF55','#FF55FF'];
+const heroRows = [
+  document.getElementById('hf0'),
+  document.getElementById('hf1'),
+  document.getElementById('hf2'),
+  document.getElementById('hf3'),
+  document.getElementById('hf4'),
+];
+const navRows = [
+  document.getElementById('nf0'),
+  document.getElementById('nf1'),
+  document.getElementById('nf2'),
+  document.getElementById('nf3'),
+  document.getElementById('nf4'),
+];
+
+let dropPos = 0;
+let colorIdx = 0;
+setInterval(() => {
+  heroRows.forEach(el => { if(el) el.style.background = 'transparent'; });
+  navRows.forEach(el => { if(el) el.style.background = 'transparent'; });
+
+  if(dropPos < 5) {
+    const color = dropColors[colorIdx];
+    if(heroRows[dropPos]) heroRows[dropPos].style.background = color;
+    if(navRows[dropPos])  navRows[dropPos].style.background  = color;
+  }
+
+  dropPos = (dropPos + 1) % 7; // 0-4 visible, 5-6 blank pause
+  if(dropPos === 0) colorIdx = (colorIdx + 1) % dropColors.length;
+}, 150);
+
+// ─── PIXEL RAIN ───
+const rainContainer = document.getElementById('pixelRain');
+const colors = [EGA[3], EGA[10], EGA[1], EGA[2]];
+for(let i=0;i<30;i++) {
+  const col = document.createElement('div');
+  col.className = 'rain-col';
+  col.style.left = (Math.random()*100) + 'vw';
+  col.style.animationDuration = (3 + Math.random()*6) + 's';
+  col.style.animationDelay = (-Math.random()*8) + 's';
+  const pixel = document.createElement('div');
+  pixel.style.cssText = `width:4px;height:4px;background:${colors[Math.floor(Math.random()*colors.length)]};opacity:${0.3+Math.random()*0.5}`;
+  col.appendChild(pixel);
+  rainContainer.appendChild(col);
+}
+
+// ─── GAME PREVIEW CANVAS ───
+(function() {
+  const c = document.getElementById('gameCanvas1');
+  if(!c) return;
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  ctx.fillStyle = '#000'; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle = EGA[15];
+  for(let i=0;i<30;i++) ctx.fillRect(Math.random()*W|0, Math.random()*H|0, 1, 1);
+  ctx.fillStyle = EGA[2];  ctx.fillRect(0, H-16, W, 4);
+  ctx.fillStyle = EGA[6];  ctx.fillRect(0, H-12, W, 12);
+  ctx.fillStyle = EGA[15]; ctx.fillRect(20, H-24, 6, 12);
+  ctx.fillStyle = EGA[12]; ctx.fillRect(20, H-30, 8, 8);
+  ctx.font = '5px "Press Start 2P", monospace';
+  ctx.fillStyle = EGA[11]; ctx.fillText('COMING SOON', 30, 20);
+  ctx.fillStyle = EGA[14]; ctx.fillText('STAY TUNED',  36, 32);
+})();
+</script>
+</body>
+</html>
