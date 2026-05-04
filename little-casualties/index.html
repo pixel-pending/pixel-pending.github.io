@@ -217,6 +217,18 @@
     color: var(--white);
     box-shadow: 6px 6px 0 var(--blue);
   }
+  .btn-magenta {
+    background: transparent;
+    color: var(--lmag);
+    border: 3px solid var(--magenta);
+    box-shadow: 4px 4px 0 var(--magenta);
+    margin-left: 12px;
+  }
+  .btn-magenta:hover {
+    background: var(--magenta);
+    color: var(--black);
+    box-shadow: 6px 6px 0 var(--magenta);
+  }
 
   /* ─── SECTIONS ─── */
   section {
@@ -422,7 +434,7 @@
     display: block;
   }
   .lb-btn {
-    position: absolute;
+    position: fixed;
     top: 50%;
     transform: translateY(-50%);
     background: var(--blue);
@@ -446,8 +458,8 @@
     transform: translateY(calc(-50% + 2px)) translateX(2px);
     box-shadow: 2px 2px 0 var(--black);
   }
-  .lb-prev { left: -72px; }
-  .lb-next { right: -72px; }
+  .lb-prev { left: 16px; }
+  .lb-next { right: 16px; }
   .lb-close {
     position: absolute;
     top: -52px;
@@ -494,6 +506,12 @@
   }
   .about-box p { font-size: 9px; line-height: 2; color: var(--lgray); margin-bottom: 16px; }
   .about-box p:last-child { margin-bottom: 0; }
+
+#tech .features-box {
+  border-color: var(--lcyan);
+  background: #001010;
+  box-shadow: 6px 6px 0 var(--cyan);
+}
 
   /* ─── CONTACT ─── */
   .contact-box {
@@ -576,11 +594,12 @@
   <p class="crumb"><a href="../index.html">// PIXEL PENDING</a> &nbsp;/&nbsp; LITTLE CASUALTIES</p>
   <h1 class="hero-title">LITTLE CASUALTIES</h1>
   <p class="hero-hook">
-    A <span class="highlight">2D Lemmings-inspired puzzle game</span> where you guide <span class="highlight3">named units</span> to the exit using placeable tools.
+    A physics-based puzzle game where you guide named units through chaotic levels using placeable tools. Some survive. Most don’t.
   </p>
   <p class="hero-sub">A PIXEL PENDING GAME</p>
   <div>
     <a href="https://store.steampowered.com/app/4535920/Little_Casualties/" target="_blank" rel="noopener" class="btn">▶ WISHLIST ON STEAM</a>
+    <a href="Little_Casualties_PressKit.zip" download class="btn btn-magenta">⬇ DOWNLOAD PRESS KIT</a>
     <a href="#trailer" class="btn btn-outline">WATCH TRAILER</a>
   </div>
 </div>
@@ -590,9 +609,10 @@
   <h2 class="section-header">// ABOUT THE GAME</h2>
   <div class="section-divider"></div>
   <div class="desc-box">
-    <p><span class="highlight">Little Casualties</span> is a chaotic, Lemmings-inspired puzzle game where hundreds of tiny named units march confidently toward an uncertain fate. Place <span class="highlight3">bridges, catapults, trampolines, and parachute dispensers</span> to guide enough survivors to the exit. The rest are acceptable losses.</p>
-    <p><span class="highlight2">Gerald</span> didn't make it. Neither did Steve, Karen, or Jorge. But Gerald Jr. is ready to try again. Then Gerald III. Then Gerald IV. The cycle continues. This is their story.</p>
-    <p>Made by one person. No budget. No time. Just Gerald. <span class="highlight3">Sorry Gerald.</span></p>
+    <p><span class="highlight">Little Casualties</span> is a chaotic, physics-based puzzle game where you guide named units through deadly environments using simple tools with unpredictable outcomes.</p>
+    <p>You place <span class="highlight3">bridges, catapults, trampolines, and parachute dispensers</span> to try and get enough units safely to the exit. Everything else is collateral.</p>
+    <p>Each level becomes a story of near success, accidental disaster, and small victories that barely hold together.</p>
+    <p>Most will not make it. Their names still matter.</p>
   </div>
 </section>
 </div>
@@ -619,7 +639,7 @@
   <div class="section-divider"></div>
   <div class="demo-card in">
     <span class="demo-card-tag">▶ DEMO CONTENT</span>
-    <h3>INCLUDED IN THE DEMO</h3>
+    <h3>Standalone demo content — features and scope are limited compared to full release</h3>
     <ul>
       <li>Classic Mode (selected levels)</li>
       <li>Outside biome</li>
@@ -632,7 +652,6 @@
       <li>Memorial Wall with epitaphs for every casualty</li>
       <li>Piano soundtrack composed in Sonic Pi</li>
       <li>Windows, Mac, and Linux native support</li>
-      <li>Under 100MB, runs on older hardware</li>
     </ul>
   </div>
 </section>
@@ -654,30 +673,44 @@
 </section>
 </div>
 
+<div style="background:#001008;padding:2px 0;">
+<section id="tech">
+  <h2 class="section-header">// TECHNICAL DETAILS</h2>
+  <div class="section-divider"></div>
+  <div class="features-box">
+    <ul>
+      <li>Native Windows, Mac, and Linux support</li>
+      <li>Small footprint, currently around 30MB, expected under 100MB at release</li>
+      <li>Runs smoothly on older hardware, tested on a 10-year-old Linux laptop</li>
+    </ul>
+  </div>
+</section>
+</div>
+
 <div style="background:#000510;padding:2px 0;">
 <section id="shots">
   <h2 class="section-header">// SCREENSHOTS</h2>
   <div class="section-divider"></div>
   <div class="shots-grid">
-    <div class="shot"><img src="screenshots/lightning.png"          alt="Little Casualties screenshot — lightning"></div>
-    <div class="shot"><img src="screenshots/shot_46145.25_1.png"    alt="Little Casualties screenshot 1"></div>
-    <div class="shot"><img src="screenshots/shot_46146.19_13.png"   alt="Little Casualties screenshot 2"></div>
-    <div class="shot"><img src="screenshots/shot_46146.19_23.png"   alt="Little Casualties screenshot 3"></div>
-    <div class="shot"><img src="screenshots/shot_46146.20_25.png"   alt="Little Casualties screenshot 4"></div>
-    <div class="shot"><img src="screenshots/shot_46146.22_4.png"    alt="Little Casualties screenshot 5"></div>
-    <div class="shot"><img src="screenshots/shot_46146.23_3.png"    alt="Little Casualties screenshot 6"></div>
+    <div class="shot"><img src="screenshots/LittleCasualties_Gameplay_Outside.png"   alt="Little Casualties — Outside biome gameplay"></div>
+    <div class="shot"><img src="screenshots/LittleCasualties_Gameplay_Synthwave.png" alt="Little Casualties — Synthwave biome gameplay"></div>
+    <div class="shot"><img src="screenshots/LittleCasualties_Gameplay_Hud.png"       alt="Little Casualties — gameplay HUD"></div>
+    <div class="shot"><img src="screenshots/LittleCasualties_Gameplay_Platforms.png" alt="Little Casualties — placeable platforms"></div>
+    <div class="shot"><img src="screenshots/LittleCasualties_Gameplay_Rainfall.png"  alt="Little Casualties — rainfall hazard"></div>
+    <div class="shot"><img src="screenshots/LittleCasualties_Gameplay_Win.png"       alt="Little Casualties — level win screen"></div>
+    <div class="shot"><img src="screenshots/LittleCasualties_MemorialWall.png"       alt="Little Casualties — Memorial Wall"></div>
   </div>
 </section>
 </div>
 
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Screenshot viewer">
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous image">◀</button>
   <div class="lightbox-stage" id="lightboxStage">
     <button class="lb-close" id="lbClose" aria-label="Close">✕ CLOSE</button>
-    <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous image">◀</button>
     <img id="lightboxImg" src="" alt="">
-    <button class="lb-btn lb-next" id="lbNext" aria-label="Next image">▶</button>
-    <span class="lb-counter" id="lbCounter">1 / 7</span>
+    <span class="lb-counter" id="lbCounter">1 / 8</span>
   </div>
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Next image">▶</button>
 </div>
 
 <div style="background:#050005;padding:2px 0;">
@@ -685,9 +718,8 @@
   <h2 class="section-header">// ABOUT PIXEL PENDING</h2>
   <div class="section-divider"></div>
   <div class="about-box">
-    <p><span class="highlight">Pixel Pending</span> is a one-person indie studio. Little Casualties is its <span class="highlight3">first commercial game</span> &mdash; a passion project built in <span class="highlight2">GameMaker</span> from scratch.</p>
-    <p>No publisher. No team. No producers. Just one developer, a lot of pixels, and a growing pile of named casualties.</p>
-    <p>The game is the work. The work is the game. <span class="highlight3">Sorry Gerald.</span></p>
+    <p><span class="highlight">Pixel Pending</span> is a one-person indie studio. Little Casualties is its <span class="highlight3">first commercial game</span>, built from scratch in <span class="highlight2">GameMaker</span>.</p>
+    <p>No publisher. No team. Just one developer, and a growing pile of named casualties.</p>
   </div>
 </section>
 </div>
