@@ -357,6 +357,16 @@
     position: absolute;
     left: 0;
   }
+  .fg-tag {
+    display: inline-block;
+    background: var(--red);
+    color: var(--white);
+    font-size: 7px;
+    padding: 2px 6px;
+    margin: 0 4px;
+    vertical-align: middle;
+    letter-spacing: 1px;
+  }
 
   /* ─── SCREENSHOTS ─── */
   .shots-grid {
@@ -565,10 +575,10 @@
 <div id="home">
   <p class="crumb"><a href="../index.html">// PIXEL PENDING</a> &nbsp;/&nbsp; LITTLE CASUALTIES</p>
   <h1 class="hero-title">LITTLE CASUALTIES</h1>
-  <p class="hero-sub">A PIXEL PENDING GAME</p>
   <p class="hero-hook">
-    A chaotic <span class="highlight">Lemmings-inspired</span> puzzle game where hundreds of tiny <span class="highlight3">named units</span> march confidently toward an <span class="highlight2">uncertain fate.</span>
+    A <span class="highlight">2D Lemmings-inspired puzzle game</span> where you guide <span class="highlight3">named units</span> to the exit using placeable tools.
   </p>
+  <p class="hero-sub">A PIXEL PENDING GAME</p>
   <div>
     <a href="https://store.steampowered.com/app/4535920/Little_Casualties/" target="_blank" rel="noopener" class="btn">▶ WISHLIST ON STEAM</a>
     <a href="#trailer" class="btn btn-outline">WATCH TRAILER</a>
@@ -605,60 +615,40 @@
 
 <div style="background:#000800;padding:2px 0;">
 <section id="demo">
-  <h2 class="section-header">// THE DEMO</h2>
+  <h2 class="section-header">// IN THE DEMO</h2>
   <div class="section-divider"></div>
-  <div class="demo-grid">
-    <div class="demo-card in">
-      <span class="demo-card-tag">▶ INCLUDED</span>
-      <h3>WHAT'S IN THE DEMO</h3>
-      <ul>
-        <li>Classic Mode</li>
-        <li>Outside biome</li>
-        <li>Synthwave biome</li>
-        <li>Bridges</li>
-        <li>Catapults</li>
-        <li>Trampolines</li>
-        <li>Parachutes</li>
-        <li>Redirectors</li>
-        <li>Memorial Wall to all the fallen</li>
-        <li>Chill piano music composed in Sonic Pi</li>
-        <li>Windows, Mac, and Linux native support</li>
-        <li>Small footprint, runs on older hardware</li>
-      </ul>
-    </div>
-    <div class="demo-card out">
-      <span class="demo-card-tag">✕ NOT INCLUDED</span>
-      <h3>WHAT'S NOT IN THE DEMO</h3>
-      <ul>
-        <li>Squad Mode</li>
-        <li>Lineage system</li>
-        <li>Permadeath system</li>
-        <li>Full level progression</li>
-        <li>All biomes</li>
-      </ul>
-    </div>
+  <div class="demo-card in">
+    <span class="demo-card-tag">▶ DEMO CONTENT</span>
+    <h3>INCLUDED IN THE DEMO</h3>
+    <ul>
+      <li>Classic Mode (selected levels)</li>
+      <li>Outside biome</li>
+      <li>Synthwave biome</li>
+      <li>Bridges</li>
+      <li>Catapults</li>
+      <li>Trampolines</li>
+      <li>Parachutes</li>
+      <li>Redirectors</li>
+      <li>Memorial Wall with epitaphs for every casualty</li>
+      <li>Piano soundtrack composed in Sonic Pi</li>
+      <li>Windows, Mac, and Linux native support</li>
+      <li>Under 100MB, runs on older hardware</li>
+    </ul>
   </div>
 </section>
 </div>
 
 <div style="background:#100800;padding:2px 0;">
 <section id="features">
-  <h2 class="section-header">// FULL GAME FEATURES</h2>
+  <h2 class="section-header">// FULL GAME ONLY</h2>
   <div class="section-divider"></div>
   <div class="features-box">
-    <span class="features-tag">★ FULL GAME — NOT IN DEMO</span>
+    <span class="features-tag">★ NOT IN DEMO</span>
     <ul>
-      <li>Guide swarms of tiny units, each with their own name and short life expectancy</li>
-      <li>Watch them scatter, swarm, and occasionally succeed</li>
-      <li>Place tools strategically, or just see what happens</li>
-      <li>Build chaotic solutions with bridges, launchers, trampolines, and other questionable engineering</li>
-      <li>Classic Mode with handcrafted levels and escalating chaos</li>
-      <li>Squad Mode with a persistent roster, permadeath, lineage, and progression</li>
-      <li>Memorial Wall where everyone is remembered, more or less</li>
-      <li>Dozens of achievements across multiple runs</li>
-      <li>Piano-driven soundtrack built in Sonic Pi, which is a real thing</li>
-      <li>Native Linux support, also a real thing</li>
-      <li>Worlds in the full release: Outside. Sawmill. Underground. City. The Office Building. Maybe Mars.</li>
+      <li>Squad Mode <span class="fg-tag">(Full Game Only)</span> &mdash; persistent roster, permadeath, lineage, progression</li>
+      <li>Full Classic Mode campaign &mdash; all levels</li>
+      <li>Additional worlds: Sawmill, Underground, City, Office Building, Mars</li>
+      <li>Dozens of achievements</li>
     </ul>
   </div>
 </section>
@@ -725,7 +715,7 @@
 
 <footer>
   <span>PIXEL PENDING LLC</span> © 2026 — ALL RIGHTS RESERVED<br>
-  LITTLE CASUALTIES &mdash; SORRY GERALD
+  LITTLE CASUALTIES &mdash; PRESS KIT
 </footer>
 
 <script>
