@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Little Casualties — Pixel Pending LLC</title>
+<meta name="description" content="A chaotic Lemmings-inspired puzzle game where hundreds of tiny named units march confidently toward an uncertain fate.">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:   #000000;
+    --blue:    #0000AA;
+    --green:   #00AA00;
+    --cyan:    #00AAAA;
+    --red:     #AA0000;
+    --magenta: #AA00AA;
+    --brown:   #AA5500;
+    --lgray:   #AAAAAA;
+    --dgray:   #555555;
+    --lblue:   #5555FF;
+    --lgreen:  #55FF55;
+    --lcyan:   #55FFFF;
+    --lred:    #FF5555;
+    --lmag:    #FF55FF;
+    --yellow:  #FFFF55;
+    --white:   #FFFFFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; image-rendering: pixelated; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--lgray);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.15) 2px,
+      rgba(0,0,0,0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: sticky;
+    top: 0;
+    background: var(--blue);
+    border-bottom: 4px solid var(--lcyan);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--white);
+    font-size: 11px;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--lcyan);
+    text-decoration: none;
+    font-size: 9px;
+    transition: color 0.1s;
+  }
+
+  .nav-links a:hover { color: var(--yellow); }
+
+  /* ─── HOURGLASS LOGO ─── */
+  .hg {
+    display: grid;
+    grid-template-columns: repeat(11, 4px);
+    grid-template-rows:    repeat(17, 4px);
+    gap: 0;
+    flex-shrink: 0;
+  }
+  .px   { width:100%; height:100%; }
+  .px._ { background: transparent; }
+  .px.W { background: #FFFFFF; }
+
+  /* ─── NOTICE BAR ─── */
+  .notice-bar {
+    background: var(--brown);
+    color: var(--yellow);
+    text-align: center;
+    padding: 8px;
+    font-size: 8px;
+    border-bottom: 2px solid var(--yellow);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .marquee-inner {
+    display: inline-block;
+    animation: marquee 22s linear infinite;
+  }
+  @keyframes marquee {
+    0%   { transform: translateX(100vw); }
+    100% { transform: translateX(-100%); }
+  }
+
+  /* ─── HERO ─── */
+  #home {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+    padding: 56px 20px;
+    text-align: center;
+  }
+
+  #home::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 8px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--blue) 0px, var(--blue) 4px,
+      var(--black) 4px, var(--black) 8px
+    );
+  }
+
+  .crumb {
+    color: var(--lcyan);
+    font-size: 8px;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+  }
+  .crumb a { color: var(--lgreen); text-decoration: none; }
+  .crumb a:hover { color: var(--yellow); }
+
+  .hero-title {
+    font-size: 26px;
+    color: var(--lcyan);
+    text-shadow: 4px 4px 0 var(--blue);
+    margin-bottom: 12px;
+    letter-spacing: 2px;
+    line-height: 1.3;
+  }
+
+  .hero-sub {
+    font-size: 9px;
+    color: var(--lgreen);
+    margin-bottom: 32px;
+    letter-spacing: 2px;
+  }
+
+  .hero-hook {
+    color: var(--yellow);
+    font-size: 12px;
+    max-width: 720px;
+    margin: 0 auto 36px;
+    line-height: 2;
+    text-shadow: 2px 2px 0 var(--brown);
+  }
+
+  .btn {
+    display: inline-block;
+    background: var(--lgreen);
+    color: var(--black);
+    padding: 12px 24px;
+    text-decoration: none;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 var(--green);
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  .btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--green);
+    background: var(--yellow);
+  }
+  .btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--green);
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--lcyan);
+    border: 3px solid var(--lcyan);
+    box-shadow: 4px 4px 0 var(--blue);
+    margin-left: 12px;
+  }
+  .btn-outline:hover {
+    background: var(--blue);
+    color: var(--white);
+    box-shadow: 6px 6px 0 var(--blue);
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    padding: 56px 24px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    color: var(--yellow);
+    font-size: 16px;
+    margin-bottom: 8px;
+    text-shadow: 3px 3px 0 var(--brown);
+  }
+
+  .section-divider {
+    height: 4px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--lcyan) 0px, var(--lcyan) 8px,
+      var(--blue) 8px, var(--blue) 16px
+    );
+    margin-bottom: 32px;
+    margin-top: 8px;
+  }
+
+  /* ─── DESCRIPTION BOX ─── */
+  .desc-box {
+    border: 3px solid var(--magenta);
+    padding: 28px;
+    background: #080010;
+    box-shadow: 6px 6px 0 var(--blue);
+  }
+  .desc-box p {
+    font-size: 10px;
+    line-height: 2.1;
+    color: var(--lgray);
+    margin-bottom: 16px;
+  }
+  .desc-box p:last-child { margin-bottom: 0; }
+  .highlight  { color: var(--lgreen); }
+  .highlight2 { color: var(--lmag); }
+  .highlight3 { color: var(--yellow); }
+
+  /* ─── TRAILER ─── */
+  .trailer-wrap {
+    border: 3px solid var(--lcyan);
+    background: var(--black);
+    padding: 8px;
+    box-shadow: 6px 6px 0 var(--blue);
+  }
+  .trailer-frame {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    background: var(--black);
+  }
+  .trailer-frame iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: 0;
+  }
+
+  /* ─── DEMO INFO ─── */
+  .demo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .demo-card {
+    padding: 24px;
+    background: #001008;
+    position: relative;
+  }
+  .demo-card.in {
+    border: 3px solid var(--lgreen);
+    box-shadow: 6px 6px 0 var(--green);
+  }
+  .demo-card.out {
+    border: 3px solid var(--lred);
+    background: #100000;
+    box-shadow: 6px 6px 0 var(--red);
+  }
+  .demo-card-tag {
+    position: absolute;
+    top: -12px; left: 12px;
+    font-size: 8px;
+    padding: 4px 10px;
+    color: var(--white);
+  }
+  .demo-card.in  .demo-card-tag { background: var(--green); }
+  .demo-card.out .demo-card-tag { background: var(--red); }
+  .demo-card h3 {
+    color: var(--yellow);
+    font-size: 11px;
+    margin-bottom: 16px;
+    margin-top: 4px;
+  }
+  .demo-card ul {
+    list-style: none;
+    font-size: 9px;
+    line-height: 2.2;
+  }
+  .demo-card.in  li::before { content: '▶ '; color: var(--lgreen); }
+  .demo-card.out li::before { content: '✕ '; color: var(--lred); }
+  .demo-card li { color: var(--lgray); padding-left: 4px; }
+
+  /* ─── FEATURES ─── */
+  .features-box {
+    border: 3px solid var(--yellow);
+    padding: 28px;
+    background: #100800;
+    box-shadow: 6px 6px 0 var(--brown);
+  }
+  .features-tag {
+    display: inline-block;
+    background: var(--yellow);
+    color: var(--black);
+    font-size: 8px;
+    padding: 4px 10px;
+    margin-bottom: 20px;
+  }
+  .features-box ul {
+    list-style: none;
+    font-size: 9px;
+    line-height: 2.2;
+  }
+  .features-box li {
+    color: var(--lgray);
+    padding-left: 18px;
+    position: relative;
+    margin-bottom: 4px;
+  }
+  .features-box li::before {
+    content: '★';
+    color: var(--lcyan);
+    position: absolute;
+    left: 0;
+  }
+
+  /* ─── SCREENSHOTS ─── */
+  .shots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .shot {
+    border: 3px solid var(--blue);
+    background: #000810;
+    padding: 6px;
+    transition: transform 0.1s, border-color 0.1s, box-shadow 0.1s;
+    cursor: zoom-in;
+  }
+  .shot:hover {
+    border-color: var(--lcyan);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--blue);
+  }
+  .shot img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ─── LIGHTBOX ─── */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 10000;
+    cursor: zoom-out;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox-stage {
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+  }
+  .lightbox img {
+    max-width: 100%;
+    max-height: calc(100vh - 96px);
+    border: 3px solid var(--lcyan);
+    box-shadow: 8px 8px 0 var(--blue);
+    display: block;
+  }
+  .lb-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--blue);
+    color: var(--lcyan);
+    border: 3px solid var(--lcyan);
+    box-shadow: 4px 4px 0 var(--black);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s, background 0.1s, color 0.1s;
+    line-height: 1;
+  }
+  .lb-btn:hover {
+    background: var(--lcyan);
+    color: var(--black);
+    transform: translateY(calc(-50% - 2px)) translateX(-2px);
+    box-shadow: 6px 6px 0 var(--black);
+  }
+  .lb-btn:active {
+    transform: translateY(calc(-50% + 2px)) translateX(2px);
+    box-shadow: 2px 2px 0 var(--black);
+  }
+  .lb-prev { left: -72px; }
+  .lb-next { right: -72px; }
+  .lb-close {
+    position: absolute;
+    top: -52px;
+    right: 0;
+    background: var(--red);
+    color: var(--white);
+    border: 3px solid var(--lred);
+    box-shadow: 4px 4px 0 var(--black);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+  }
+  .lb-close:hover {
+    background: var(--lred);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--black);
+  }
+  .lb-counter {
+    position: absolute;
+    bottom: -36px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--yellow);
+    font-size: 9px;
+    letter-spacing: 2px;
+    background: var(--black);
+    padding: 6px 10px;
+    border: 2px solid var(--brown);
+  }
+  @media (max-width: 900px) {
+    .lb-prev { left: 4px; }
+    .lb-next { right: 4px; }
+    .lb-btn { padding: 10px 12px; font-size: 12px; }
+  }
+
+  /* ─── ABOUT ─── */
+  .about-box {
+    border: 3px solid var(--magenta);
+    padding: 28px;
+    background: #080010;
+    box-shadow: 6px 6px 0 var(--blue);
+  }
+  .about-box p { font-size: 9px; line-height: 2; color: var(--lgray); margin-bottom: 16px; }
+  .about-box p:last-child { margin-bottom: 0; }
+
+  /* ─── CONTACT ─── */
+  .contact-box {
+    border: 3px solid var(--lgreen);
+    padding: 28px;
+    background: #001008;
+    box-shadow: 6px 6px 0 var(--green);
+  }
+  .contact-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 2px dashed var(--dgray);
+    font-size: 9px;
+    flex-wrap: wrap;
+  }
+  .contact-row:last-child { border-bottom: none; }
+  .contact-label { color: var(--lcyan); min-width: 80px; }
+  .contact-val a { color: var(--lgreen); text-decoration: none; word-break: break-all; }
+  .contact-val a:hover { color: var(--yellow); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--blue);
+    border-top: 4px solid var(--lcyan);
+    text-align: center;
+    padding: 20px;
+    font-size: 8px;
+    color: var(--lgray);
+  }
+  footer span { color: var(--lcyan); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 640px) {
+    .hero-title { font-size: 18px; }
+    .hero-hook  { font-size: 10px; }
+    .demo-grid  { grid-template-columns: 1fr; }
+    .nav-links  { gap: 12px; }
+    .nav-links a { font-size: 8px; }
+    .btn-outline { margin-left: 0; margin-top: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../index.html">
+    <div class="hg">
+      <div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _" id="nf0"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _" id="nf1"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _" id="nf2"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _" id="nf3"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _" id="nf4"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">HOME</a></li>
+    <li><a href="#trailer">TRAILER</a></li>
+    <li><a href="#demo">DEMO</a></li>
+    <li><a href="#features">FEATURES</a></li>
+    <li><a href="#shots">SHOTS</a></li>
+    <li><a href="#contact">CONTACT</a></li>
+  </ul>
+</nav>
+
+<div id="home">
+  <p class="crumb"><a href="../index.html">// PIXEL PENDING</a> &nbsp;/&nbsp; LITTLE CASUALTIES</p>
+  <h1 class="hero-title">LITTLE CASUALTIES</h1>
+  <p class="hero-sub">A PIXEL PENDING GAME</p>
+  <p class="hero-hook">
+    A chaotic <span class="highlight">Lemmings-inspired</span> puzzle game where hundreds of tiny <span class="highlight3">named units</span> march confidently toward an <span class="highlight2">uncertain fate.</span>
+  </p>
+  <div>
+    <a href="https://store.steampowered.com/app/4535920/Little_Casualties/" target="_blank" rel="noopener" class="btn">▶ WISHLIST ON STEAM</a>
+    <a href="#trailer" class="btn btn-outline">WATCH TRAILER</a>
+  </div>
+</div>
+
+<div style="background:#050005;padding:2px 0;">
+<section id="about-game">
+  <h2 class="section-header">// ABOUT THE GAME</h2>
+  <div class="section-divider"></div>
+  <div class="desc-box">
+    <p><span class="highlight">Little Casualties</span> is a chaotic, Lemmings-inspired puzzle game where hundreds of tiny named units march confidently toward an uncertain fate. Place <span class="highlight3">bridges, catapults, trampolines, and parachute dispensers</span> to guide enough survivors to the exit. The rest are acceptable losses.</p>
+    <p><span class="highlight2">Gerald</span> didn't make it. Neither did Steve, Karen, or Jorge. But Gerald Jr. is ready to try again. Then Gerald III. Then Gerald IV. The cycle continues. This is their story.</p>
+    <p>Made by one person. No budget. No time. Just Gerald. <span class="highlight3">Sorry Gerald.</span></p>
+  </div>
+</section>
+</div>
+
+<div style="background:#000510;padding:2px 0;">
+<section id="trailer">
+  <h2 class="section-header">// TRAILER</h2>
+  <div class="section-divider"></div>
+  <div class="trailer-wrap">
+    <div class="trailer-frame">
+      <iframe
+        src="https://www.youtube.com/embed/338pvgY3EoI"
+        title="Little Casualties — Trailer"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+</div>
+
+<div style="background:#000800;padding:2px 0;">
+<section id="demo">
+  <h2 class="section-header">// THE DEMO</h2>
+  <div class="section-divider"></div>
+  <div class="demo-grid">
+    <div class="demo-card in">
+      <span class="demo-card-tag">▶ INCLUDED</span>
+      <h3>WHAT'S IN THE DEMO</h3>
+      <ul>
+        <li>Classic Mode</li>
+        <li>Outside biome</li>
+        <li>Synthwave biome</li>
+        <li>Bridges</li>
+        <li>Catapults</li>
+        <li>Trampolines</li>
+        <li>Parachutes</li>
+        <li>Redirectors</li>
+        <li>Memorial Wall to all the fallen</li>
+        <li>Chill piano music composed in Sonic Pi</li>
+        <li>Windows, Mac, and Linux native support</li>
+        <li>Small footprint, runs on older hardware</li>
+      </ul>
+    </div>
+    <div class="demo-card out">
+      <span class="demo-card-tag">✕ NOT INCLUDED</span>
+      <h3>WHAT'S NOT IN THE DEMO</h3>
+      <ul>
+        <li>Squad Mode</li>
+        <li>Lineage system</li>
+        <li>Permadeath system</li>
+        <li>Full level progression</li>
+        <li>All biomes</li>
+      </ul>
+    </div>
+  </div>
+</section>
+</div>
+
+<div style="background:#100800;padding:2px 0;">
+<section id="features">
+  <h2 class="section-header">// FULL GAME FEATURES</h2>
+  <div class="section-divider"></div>
+  <div class="features-box">
+    <span class="features-tag">★ FULL GAME — NOT IN DEMO</span>
+    <ul>
+      <li>Guide swarms of tiny units, each with their own name and short life expectancy</li>
+      <li>Watch them scatter, swarm, and occasionally succeed</li>
+      <li>Place tools strategically, or just see what happens</li>
+      <li>Build chaotic solutions with bridges, launchers, trampolines, and other questionable engineering</li>
+      <li>Classic Mode with handcrafted levels and escalating chaos</li>
+      <li>Squad Mode with a persistent roster, permadeath, lineage, and progression</li>
+      <li>Memorial Wall where everyone is remembered, more or less</li>
+      <li>Dozens of achievements across multiple runs</li>
+      <li>Piano-driven soundtrack built in Sonic Pi, which is a real thing</li>
+      <li>Native Linux support, also a real thing</li>
+      <li>Worlds in the full release: Outside. Sawmill. Underground. City. The Office Building. Maybe Mars.</li>
+    </ul>
+  </div>
+</section>
+</div>
+
+<div style="background:#000510;padding:2px 0;">
+<section id="shots">
+  <h2 class="section-header">// SCREENSHOTS</h2>
+  <div class="section-divider"></div>
+  <div class="shots-grid">
+    <div class="shot"><img src="screenshots/lightning.png"          alt="Little Casualties screenshot — lightning"></div>
+    <div class="shot"><img src="screenshots/shot_46145.25_1.png"    alt="Little Casualties screenshot 1"></div>
+    <div class="shot"><img src="screenshots/shot_46146.19_13.png"   alt="Little Casualties screenshot 2"></div>
+    <div class="shot"><img src="screenshots/shot_46146.19_23.png"   alt="Little Casualties screenshot 3"></div>
+    <div class="shot"><img src="screenshots/shot_46146.20_25.png"   alt="Little Casualties screenshot 4"></div>
+    <div class="shot"><img src="screenshots/shot_46146.22_4.png"    alt="Little Casualties screenshot 5"></div>
+    <div class="shot"><img src="screenshots/shot_46146.23_3.png"    alt="Little Casualties screenshot 6"></div>
+  </div>
+</section>
+</div>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Screenshot viewer">
+  <div class="lightbox-stage" id="lightboxStage">
+    <button class="lb-close" id="lbClose" aria-label="Close">✕ CLOSE</button>
+    <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous image">◀</button>
+    <img id="lightboxImg" src="" alt="">
+    <button class="lb-btn lb-next" id="lbNext" aria-label="Next image">▶</button>
+    <span class="lb-counter" id="lbCounter">1 / 7</span>
+  </div>
+</div>
+
+<div style="background:#050005;padding:2px 0;">
+<section id="about-studio">
+  <h2 class="section-header">// ABOUT PIXEL PENDING</h2>
+  <div class="section-divider"></div>
+  <div class="about-box">
+    <p><span class="highlight">Pixel Pending</span> is a one-person indie studio. Little Casualties is its <span class="highlight3">first commercial game</span> &mdash; a passion project built in <span class="highlight2">GameMaker</span> from scratch.</p>
+    <p>No publisher. No team. No producers. Just one developer, a lot of pixels, and a growing pile of named casualties.</p>
+    <p>The game is the work. The work is the game. <span class="highlight3">Sorry Gerald.</span></p>
+  </div>
+</section>
+</div>
+
+<div style="background:#000800;padding:2px 0;">
+<section id="contact">
+  <h2 class="section-header">// CONTACT &amp; LINKS</h2>
+  <div class="section-divider"></div>
+  <div class="contact-box">
+    <div class="contact-row">
+      <span class="contact-label">PRESS</span>
+      <span class="contact-val"><a href="mailto:hello@pixelpending.gg">hello@pixelpending.gg</a></span>
+    </div>
+    <div class="contact-row">
+      <span class="contact-label">STEAM</span>
+      <span class="contact-val"><a href="https://store.steampowered.com/app/4535920/Little_Casualties/" target="_blank" rel="noopener">store.steampowered.com/app/4535920/Little_Casualties</a></span>
+    </div>
+    <div class="contact-row">
+      <span class="contact-label">STUDIO</span>
+      <span class="contact-val"><a href="../index.html">Pixel Pending LLC</a></span>
+    </div>
+  </div>
+</section>
+</div>
+
+<footer>
+  <span>PIXEL PENDING LLC</span> © 2026 — ALL RIGHTS RESERVED<br>
+  LITTLE CASUALTIES &mdash; SORRY GERALD
+</footer>
+
+<script>
+const dropColors = ['#FF5555','#5555FF','#55FFFF','#55FF55','#FFFF55','#FF55FF'];
+const navRows = [
+  document.getElementById('nf0'),
+  document.getElementById('nf1'),
+  document.getElementById('nf2'),
+  document.getElementById('nf3'),
+  document.getElementById('nf4'),
+];
+let dropPos = 0, colorIdx = 0;
+setInterval(() => {
+  navRows.forEach(el => { if(el) el.style.background = 'transparent'; });
+  if(dropPos < 5) {
+    const color = dropColors[colorIdx];
+    if(navRows[dropPos]) navRows[dropPos].style.background = color;
+  }
+  dropPos = (dropPos + 1) % 7;
+  if(dropPos === 0) colorIdx = (colorIdx + 1) % dropColors.length;
+}, 150);
+
+// Lightbox carousel
+const lb       = document.getElementById('lightbox');
+const lbStage  = document.getElementById('lightboxStage');
+const lbImg    = document.getElementById('lightboxImg');
+const lbPrev   = document.getElementById('lbPrev');
+const lbNext   = document.getElementById('lbNext');
+const lbClose  = document.getElementById('lbClose');
+const lbCount  = document.getElementById('lbCounter');
+const shots    = Array.from(document.querySelectorAll('.shot img'));
+let lbIndex = 0;
+
+function lbShow(i) {
+  lbIndex = (i + shots.length) % shots.length;
+  const img = shots[lbIndex];
+  lbImg.src = img.src;
+  lbImg.alt = img.alt;
+  lbCount.textContent = (lbIndex + 1) + ' / ' + shots.length;
+}
+function lbOpen(i) { lbShow(i); lb.classList.add('open'); }
+function lbHide() { lb.classList.remove('open'); lbImg.src = ''; }
+
+shots.forEach((img, i) => {
+  img.parentElement.addEventListener('click', () => lbOpen(i));
+});
+lbPrev.addEventListener('click', e => { e.stopPropagation(); lbShow(lbIndex - 1); });
+lbNext.addEventListener('click', e => { e.stopPropagation(); lbShow(lbIndex + 1); });
+lbClose.addEventListener('click', e => { e.stopPropagation(); lbHide(); });
+lbStage.addEventListener('click', e => e.stopPropagation());
+lb.addEventListener('click', lbHide);
+document.addEventListener('keydown', e => {
+  if(!lb.classList.contains('open')) return;
+  if(e.key === 'Escape')     lbHide();
+  if(e.key === 'ArrowLeft')  lbShow(lbIndex - 1);
+  if(e.key === 'ArrowRight') lbShow(lbIndex + 1);
+});
+</script>
+</body>
+</html>
