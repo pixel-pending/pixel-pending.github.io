@@ -1,0 +1,40 @@
+---
+layout: devlog
+title: Devlog
+heading: DEVLOG
+description: Development log of Pixel Pending LLC — progress notes on Little Casualties and whatever comes next.
+---
+<!-- ═══════════════════════════════════════════════════
+     This page builds itself. To post a new devlog entry,
+     add a markdown file to _posts/ named:
+
+         YYYY-MM-DD-short-slug.md
+
+     with this shape:
+
+         ---
+         title: TITLE IN CAPS
+         ---
+         Body in markdown. Inline HTML works too, e.g.
+         <span class="highlight">green</span>,
+         <span class="highlight2">magenta</span>,
+         <span class="highlight3">yellow</span>.
+
+     The filename date IS the post date and must be in the
+     past (future-dated posts are skipped). The entry shows
+     up here, on the front page // LATEST, at its own URL
+     /devlog/<slug>/, and in the RSS feed — automatically.
+     ═══════════════════════════════════════════════════ -->
+<section>
+
+  {% for post in site.posts %}
+  <div class="log-entry" id="log-{{ post.slug }}">
+    <span class="log-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+    <h2 class="log-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
+    {{ post.content }}
+  </div>
+  {% endfor %}
+
+  <p class="log-end">— END OF LOG —</p>
+
+</section>

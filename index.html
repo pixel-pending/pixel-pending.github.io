@@ -1,9 +1,21 @@
+---
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pixel Pending LLC</title>
+<meta name="description" content="Pixel Pending LLC — a one-person indie games studio. First release: Little Casualties, a chaotic Lemmings-inspired puzzle game. Coming late 2026.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pixel Pending LLC">
+<meta property="og:title" content="Pixel Pending LLC">
+<meta property="og:description" content="A one-person indie games studio. First release: Little Casualties, a chaotic Lemmings-inspired puzzle game. Coming late 2026.">
+<meta property="og:url" content="https://pixelpending.gg/">
+<meta property="og:image" content="https://pixelpending.gg/images/units_screenshot.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@PixelPending">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext x='0' y='13' font-size='14'%3E%E2%8F%B3%3C/text%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -376,6 +388,35 @@
     50%       { opacity: 0; }
   }
 
+  /* ─── LATEST NEWS ─── */
+  .news-box {
+    border: 3px solid var(--cyan);
+    background: #001010;
+    box-shadow: 6px 6px 0 var(--blue);
+    padding: 12px 20px;
+  }
+  .news-row {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 2px dashed var(--dgray);
+    font-size: 9px;
+    text-decoration: none;
+    flex-wrap: wrap;
+  }
+  .news-row:last-child { border-bottom: none; }
+  .news-date { color: var(--dgray); flex-shrink: 0; }
+  .news-title { color: var(--lgreen); }
+  .news-title::before { content: '> '; color: var(--lcyan); }
+  a.news-row:hover .news-title { color: var(--yellow); }
+  .news-more {
+    margin-top: 16px;
+    font-size: 8px;
+  }
+  .news-more a { color: var(--lcyan); text-decoration: none; }
+  .news-more a:hover { color: var(--yellow); }
+
   .notice-bar {
     background: var(--brown);
     color: var(--yellow);
@@ -430,6 +471,7 @@
   <ul class="nav-links">
     <li><a href="#home">HOME</a></li>
     <li><a href="#games">GAMES</a></li>
+    <li><a href="devlog/">DEVLOG</a></li>
     <li><a href="#about">ABOUT</a></li>
     <li><a href="#contact">CONTACT</a></li>
   </ul>
@@ -472,6 +514,22 @@
   </div>
 </div>
 
+<div style="background:#001005;padding:2px 0;">
+<section id="news">
+  <h2 class="section-header">// LATEST</h2>
+  <div class="section-divider"></div>
+  <div class="news-box">
+    {% for post in site.posts limit:3 %}
+    <a class="news-row" href="devlog/#log-{{ post.slug }}">
+      <span class="news-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+      <span class="news-title">{{ post.title }}</span>
+    </a>
+    {% endfor %}
+  </div>
+  <p class="news-more"><a href="devlog/">&raquo; FULL DEVLOG</a></p>
+</section>
+</div>
+
 <div style="background:#000510;padding:2px 0;">
 <section id="games">
   <h2 class="section-header">// GAMES</h2>
@@ -488,7 +546,7 @@
         <p class="game-desc">A chaotic Lemmings-inspired puzzle game. Guide tiny named units through deadly terrain. Not everyone makes it. Sorry, Gerald.</p>
 
         <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-            <a href="https://store.steampowered.com/app/4535920/Little_Casualties/" target="_new" class="btn" style="font-size:7px;padding:6px 10px;">STEAM</a>
+            <a href="https://store.steampowered.com/app/4535920/Little_Casualties/" target="_blank" rel="noopener" class="btn" style="font-size:7px;padding:6px 10px;">STEAM</a>
             <a href="little-casualties/" class="btn" style="font-size:7px;padding:6px 10px;">PRESS KIT</a>
             <!-- <a href="#" class="btn" style="font-size:7px;padding:6px 10px;">ITCH.IO</a> -->
             <!-- <a href="#" class="btn" style="font-size:7px;padding:6px 10px;">URL</a> -->
@@ -534,7 +592,7 @@
     </div>
     <div class="contact-row">
       <span class="contact-label">WEBSITE</span>
-      <span class="contact-val"><a href="#">www.pixelpending.gg</a></span>
+      <span class="contact-val"><a href="https://pixelpending.gg">www.pixelpending.gg</a></span>
     </div>
     <div class="contact-row">
       <span class="contact-label">DISCORD</span>

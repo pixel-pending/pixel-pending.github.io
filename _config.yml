@@ -1,0 +1,22 @@
+title: Pixel Pending LLC
+description: A one-person indie games studio. First release, Little Casualties, coming late 2026.
+url: "https://pixelpending.gg"
+
+# devlog posts live in _posts/ as YYYY-MM-DD-slug.md
+permalink: /devlog/:title/
+
+plugins:
+  - jekyll-feed
+
+feed:
+  path: devlog/feed.xml
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+
+exclude:
+  - README.md

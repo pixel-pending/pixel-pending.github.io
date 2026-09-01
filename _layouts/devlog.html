@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ page.title }} — Pixel Pending LLC</title>
+{% if page.excerpt %}{% assign meta_desc = page.excerpt | strip_html | strip_newlines | strip | truncate: 160 %}{% else %}{% assign meta_desc = page.description | default: site.description %}{% endif %}
+<meta name="description" content="{{ meta_desc }}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pixel Pending LLC">
+<meta property="og:title" content="{{ page.title }} — Pixel Pending">
+<meta property="og:description" content="{{ meta_desc }}">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+<meta property="og:image" content="https://pixelpending.gg/images/units_screenshot.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@PixelPending">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext x='0' y='13' font-size='14'%3E%E2%8F%B3%3C/text%3E%3C/svg%3E">
+{% feed_meta %}
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:   #000000;
+    --blue:    #0000AA;
+    --green:   #00AA00;
+    --cyan:    #00AAAA;
+    --red:     #AA0000;
+    --magenta: #AA00AA;
+    --brown:   #AA5500;
+    --lgray:   #AAAAAA;
+    --dgray:   #555555;
+    --lblue:   #5555FF;
+    --lgreen:  #55FF55;
+    --lcyan:   #55FFFF;
+    --lred:    #FF5555;
+    --lmag:    #FF55FF;
+    --yellow:  #FFFF55;
+    --white:   #FFFFFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; image-rendering: pixelated; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--lgray);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.15) 2px,
+      rgba(0,0,0,0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: sticky;
+    top: 0;
+    background: var(--blue);
+    border-bottom: 4px solid var(--lcyan);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--white);
+    font-size: 11px;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--lcyan);
+    text-decoration: none;
+    font-size: 9px;
+    transition: color 0.1s;
+  }
+
+  .nav-links a:hover { color: var(--yellow); }
+
+  /* ─── HOURGLASS LOGO ─── */
+  .hg {
+    display: grid;
+    grid-template-columns: repeat(11, 4px);
+    grid-template-rows:    repeat(17, 4px);
+    gap: 0;
+    flex-shrink: 0;
+  }
+  .px   { width:100%; height:100%; }
+  .px._ { background: transparent; }
+  .px.W { background: #FFFFFF; }
+
+  /* ─── HEADER ─── */
+  #top {
+    padding: 56px 20px 24px;
+    text-align: center;
+    position: relative;
+  }
+
+  #top::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 8px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--blue) 0px, var(--blue) 4px,
+      var(--black) 4px, var(--black) 8px
+    );
+  }
+
+  .crumb {
+    color: var(--lcyan);
+    font-size: 8px;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+  }
+  .crumb a { color: var(--lgreen); text-decoration: none; }
+  .crumb a:hover { color: var(--yellow); }
+
+  .hero-title {
+    font-size: 26px;
+    color: var(--lcyan);
+    text-shadow: 4px 4px 0 var(--blue);
+    margin-bottom: 12px;
+    letter-spacing: 2px;
+    line-height: 1.4;
+  }
+
+  .hero-sub {
+    font-size: 9px;
+    color: var(--lgreen);
+    letter-spacing: 2px;
+  }
+
+  .prompt::after {
+    content: '█';
+    animation: blink 0.8s step-end infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
+  /* ─── LOG ─── */
+  section {
+    padding: 40px 24px 64px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .log-entry {
+    scroll-margin-top: 80px;
+    border: 3px solid var(--blue);
+    background: #000810;
+    padding: 24px;
+    margin-bottom: 32px;
+    position: relative;
+    transition: border-color 0.1s;
+  }
+  .log-entry:hover { border-color: var(--lcyan); }
+
+  .log-date {
+    position: absolute;
+    top: -12px; left: 12px;
+    background: var(--blue);
+    color: var(--lcyan);
+    font-size: 8px;
+    padding: 3px 8px;
+    letter-spacing: 1px;
+  }
+
+  .log-title {
+    color: var(--yellow);
+    font-size: 12px;
+    margin-bottom: 16px;
+    margin-top: 4px;
+    text-shadow: 2px 2px 0 var(--brown);
+  }
+  .log-title::before { content: '> '; color: var(--lgreen); }
+  .log-title a { color: inherit; text-decoration: none; }
+  .log-title a:hover { color: var(--lcyan); }
+
+  .log-entry p {
+    font-size: 9px;
+    line-height: 2.1;
+    color: var(--lgray);
+    margin-bottom: 12px;
+  }
+  .log-entry p:last-child { margin-bottom: 0; }
+
+  .log-entry ul, .log-entry ol {
+    font-size: 9px;
+    line-height: 2.1;
+    color: var(--lgray);
+    margin: 0 0 12px 20px;
+  }
+
+  .log-entry img { max-width: 100%; height: auto; border: 2px solid var(--dgray); }
+
+  .log-entry a { color: var(--lgreen); text-decoration: none; }
+  .log-entry a:hover { color: var(--yellow); }
+
+  .highlight  { color: var(--lgreen); }
+  .highlight2 { color: var(--lmag); }
+  .highlight3 { color: var(--yellow); }
+
+  .log-end {
+    text-align: center;
+    color: var(--dgray);
+    font-size: 8px;
+    letter-spacing: 2px;
+    padding-top: 8px;
+  }
+
+  .log-back { text-align: center; font-size: 8px; }
+  .log-back a { color: var(--lcyan); text-decoration: none; }
+  .log-back a:hover { color: var(--yellow); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--blue);
+    border-top: 4px solid var(--lcyan);
+    text-align: center;
+    padding: 20px;
+    font-size: 8px;
+    color: var(--lgray);
+  }
+  footer span { color: var(--lcyan); }
+
+  @media (max-width: 640px) {
+    .hero-title { font-size: 18px; }
+    .nav-links  { gap: 12px; }
+    .nav-links a { font-size: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">
+    <div class="hg">
+      <div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _" id="nf0"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _" id="nf1"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _" id="nf2"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _" id="nf3"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _" id="nf4"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px _"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px _"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px _"></div>
+      <div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div><div class="px W"></div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">HOME</a></li>
+    <li><a href="/#games">GAMES</a></li>
+    <li><a href="/devlog/">DEVLOG</a></li>
+    <li><a href="/#contact">CONTACT</a></li>
+  </ul>
+</nav>
+
+<div id="top">
+  <p class="crumb"><a href="/">// PIXEL PENDING</a> &nbsp;/&nbsp; <a href="/devlog/">DEVLOG</a>{% if page.date %} &nbsp;/&nbsp; {{ page.title }}{% endif %}</p>
+  <h1 class="hero-title">{{ page.heading | default: page.title }}</h1>
+  <p class="hero-sub">{% if page.date %}LOG ENTRY {{ page.date | date: "%Y-%m-%d" }}{% else %}CAPTAIN'S LOG{% endif %}&nbsp;&nbsp;<span class="prompt"></span></p>
+</div>
+
+{{ content }}
+
+<footer>
+  <span>PIXEL PENDING LLC</span> © 2026 — ALL RIGHTS RESERVED<br>
+  DEVLOG
+</footer>
+
+<script>
+const dropColors = ['#FF5555','#5555FF','#55FFFF','#55FF55','#FFFF55','#FF55FF'];
+const navRows = [
+  document.getElementById('nf0'),
+  document.getElementById('nf1'),
+  document.getElementById('nf2'),
+  document.getElementById('nf3'),
+  document.getElementById('nf4'),
+];
+let dropPos = 0, colorIdx = 0;
+setInterval(() => {
+  navRows.forEach(el => { if(el) el.style.background = 'transparent'; });
+  if(dropPos < 5) {
+    const color = dropColors[colorIdx];
+    if(navRows[dropPos]) navRows[dropPos].style.background = color;
+  }
+  dropPos = (dropPos + 1) % 7;
+  if(dropPos === 0) colorIdx = (colorIdx + 1) % dropColors.length;
+}, 150);
+</script>
+</body>
+</html>
