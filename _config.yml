@@ -5,6 +5,10 @@ url: "https://pixelpending.gg"
 # devlog posts live in _posts/ as YYYY-MM-DD-slug.md
 permalink: /devlog/:title/
 
+# a <!--more--> line in a post marks where the devlog index cuts off;
+# the full text lives on the post's own page
+excerpt_separator: "<!--more-->"
+
 plugins:
   - jekyll-feed
 

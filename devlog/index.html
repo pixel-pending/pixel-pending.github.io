@@ -24,6 +24,15 @@ description: Development log of Pixel Pending LLC — progress notes on Little C
      past (future-dated posts are skipped). The entry shows
      up here, on the front page // LATEST, at its own URL
      /devlog/<slug>/, and in the RSS feed — automatically.
+
+     LONG POSTS: put a line containing only
+
+         <!--more-->
+
+     where the teaser ends. This page then shows only the
+     text above it plus a READ FULL ENTRY link; the post's
+     own page always shows everything. No marker = the
+     whole post shows here, like before.
      ═══════════════════════════════════════════════════ -->
 <section>
 
@@ -31,7 +40,10 @@ description: Development log of Pixel Pending LLC — progress notes on Little C
   <div class="log-entry" id="log-{{ post.slug }}">
     <span class="log-date">{{ post.date | date: "%Y-%m-%d" }}</span>
     <h2 class="log-title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
-    {{ post.content }}
+    {{ post.excerpt }}
+    {% if post.excerpt != post.content %}
+    <p><a href="{{ post.url }}">&raquo; READ FULL ENTRY</a></p>
+    {% endif %}
   </div>
   {% endfor %}
 
