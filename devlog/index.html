@@ -4,7 +4,8 @@ title: Devlog
 heading: DEVLOG
 description: Development log of Pixel Pending LLC — progress notes on Little Casualties and whatever comes next.
 ---
-<!-- ═══════════════════════════════════════════════════
+{% comment %}
+     ═══════════════════════════════════════════════════
      This page builds itself. To post a new devlog entry,
      add a markdown file to _posts/ named:
 
@@ -33,7 +34,12 @@ description: Development log of Pixel Pending LLC — progress notes on Little C
      text above it plus a READ FULL ENTRY link; the post's
      own page always shows everything. No marker = the
      whole post shows here, like before.
-     ═══════════════════════════════════════════════════ -->
+
+     (This block is a Liquid comment because the marker
+     above contains "-->", which would terminate a normal
+     HTML comment early and leak this text onto the page.)
+     ═══════════════════════════════════════════════════
+{% endcomment %}
 <section>
 
   {% for post in site.posts %}
